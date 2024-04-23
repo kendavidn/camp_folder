@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Simple Quizzer</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+
+        max-width: 600px;
+
+        margin: 0 auto;
+
+        padding: 20px;
+      }
+
+      .options {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        margin-bottom: 10px;
+      }
+
+      .option {
+        background-color: #87c8d6;
+
+        border: none;
+
+        border-radius: 5px;
+
+        padding: 10px 20px;
+
+        margin: 5px;
+
+        cursor: pointer;
+
+        transition: background-color 0.3s;
+      }
+
+      .option:hover {
+        background-color: #5ca7b8;
+      }
+
+      .option.selected {
+        background-color: #3498db;
+
+        color: #fff;
+      }
+
+      .message {
+        border-radius: 5px;
+
+        padding: 10px;
+
+        display: none;
+      }
+
+      .correct {
+        background-color: #d4edda;
+
+        color: #155724;
+      }
+
+      .incorrect {
+        background-color: #f8d7da;
+
+        color: #721c24;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Simple Quizzer</h1>
+
+    <div id="quiz"></div>
+👏
+    <script>
+      const quizData = [
+        {
+          question: "What is the capital of France?",
+
+          options: [
+            {
+              text: "London",
+              message:
+                "Incorrect. London is the capital of the United Kingdom.",
+            },
+
+            {
+              text: "Paris",
+              message: "Correct! Paris is the capital of France.",
+            },
+
+            {
+              text: "Berlin",
+              message: "Incorrect. Berlin is the capital of Germany.",
+            },
+
+            {
+              text: "Madrid",
+              message: "Incorrect. Madrid is the capital of Spain.",
+            },
+          ],
+
+          answer: 1,
+        },
+
+        {
+          question: "Which planet is known as the Red Planet?",
+
+          options: [
+            {
+              text: "Mars",
+              message:
+                "Correct! Mars is known as the Red Planet due to its reddish appearance.",
+            },
+
+            {
+              text: "Venus",
+              message: "Incorrect. Venus is not known as the Red Planet.",
+            },
+
+            {
+              text: "Jupiter",
+              message:
+                "Incorrect. Jupiter is the largest planet in our solar system.",
+            },
+
+            {
+              text: "Saturn",
+              message:
+                "Incorrect. Saturn is known for its prominent ring system.",
+            },
+          ],
+
+          answer: 0,
+        },
+      ];
+
+      const quizContainer = document.getElementById("quiz");
+
+      function renderQuiz() {
+        quizData.forEach((item, index) => {
+          const questionDiv = document.createElement("div");
+
+          questionDiv.className = "question";
+
+          questionDiv.innerHTML = `<h2>Question ${index + 1}</h2><p>${
+            item.question
+          }</p>`;
+
+          const optionsDiv = document.createElement("div");
+
+          optionsDiv.className = "options";
+
+          item.options.forEach((option, optionIndex) => {
+            const optionButton = document.createElement("button");
+
+            optionButton.className = "option";
+
+            optionButton.textContent = option.text;
+
+            optionButton.addEventListener("click", () => {
+              checkAnswer(index, optionIndex);
+
+              const options = optionsDiv.children;
+
+              for (let i = 0; i < options.length; i++) {
+                options[i].classList.remove("selected");
+              }
+
+              optionButton.classList.add("selected");
+            });
+
+            optionsDiv.appendChild(optionButton);
+          });
+
+          const messageDiv = document.createElement("div");
+
+          messageDiv.className = "message";
+
+          questionDiv.appendChild(optionsDiv);
+
+          questionDiv.appendChild(messageDiv);
+
+          quizContainer.appendChild(questionDiv);
+        });
+      }
+
+      function checkAnswer(questionIndex, selectedOption) {
+        const question = quizData[questionIndex];
+
+        const messageDiv =
+          quizContainer.children[questionIndex].querySelector(".message");
+
+        messageDiv.textContent = question.options[selectedOption].message;
+
+        if (selectedOption === question.answer) {
+          messageDiv.classList.remove("incorrect");
+
+          messageDiv.classList.add("correct");
+        } else {
+          messageDiv.classList.remove("correct");
+
+          messageDiv.classList.add("incorrect");
+        }
+
+        messageDiv.style.display = "block";
+      }
+
+      renderQuiz();
+    </script>
+  </body>
+</html>
